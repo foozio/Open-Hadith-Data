@@ -1,0 +1,8 @@
+# This file keeps the data directory in version control
+# while allowing the actual data files to be ignored
+
+This directory contains:
+- users.json (user management data)
+- api-tokens.json (API token storage)
+
+These files are automatically created by the storage system when needed.

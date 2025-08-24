@@ -1,0 +1,85 @@
+{
+  "version": "1.4.0",
+  "generatedAt": "2025-08-24T09:49:19.808Z",
+  "totalCollections": 9,
+  "files": [
+    {
+      "collectionId": "maliks_muwataa",
+      "collectionName": "Maliks Muwataa",
+      "collectionNameArabic": "موطأ مالك",
+      "filename": "maliks_muwataa.json",
+      "fileSizeMB": "2.48",
+      "hadithCount": 3188
+    },
+    {
+      "collectionId": "musnad_ahmad_ibn_hanbal",
+      "collectionName": "Musnad Ahmad Ibn-Hanbal",
+      "collectionNameArabic": "مسند أحمد بن حنبل",
+      "filename": "musnad_ahmad_ibn_hanbal.json",
+      "fileSizeMB": "47.43",
+      "hadithCount": 52726
+    },
+    {
+      "collectionId": "sahih_al_bukhari",
+      "collectionName": "Sahih Al-Bukhari",
+      "collectionNameArabic": "صحيح البخاري",
+      "filename": "sahih_al_bukhari.json",
+      "fileSizeMB": "15.11",
+      "hadithCount": 14016
+    },
+    {
+      "collectionId": "sahih_muslim",
+      "collectionName": "Sahih Muslim",
+      "collectionNameArabic": "صحيح مسلم",
+      "filename": "sahih_muslim.json",
+      "fileSizeMB": "13.72",
+      "hadithCount": 10724
+    },
+    {
+      "collectionId": "sunan_abu_dawud",
+      "collectionName": "Sunan Abu-Dawud",
+      "collectionNameArabic": "سنن أبي داود",
+      "filename": "sunan_abu_dawud.json",
+      "fileSizeMB": "9.76",
+      "hadithCount": 9180
+    },
+    {
+      "collectionId": "sunan_al_darimi",
+      "collectionName": "Sunan Al-Darimi",
+      "collectionNameArabic": "سنن الدارمي",
+      "filename": "sunan_al_darimi.json",
+      "fileSizeMB": "5.12",
+      "hadithCount": 6734
+    },
+    {
+      "collectionId": "sunan_al_nasai",
+      "collectionName": "Sunan Al-Nasai",
+      "collectionNameArabic": "سنن النسائي",
+      "filename": "sunan_al_nasai.json",
+      "fileSizeMB": "10.19",
+      "hadithCount": 11324
+    },
+    {
+      "collectionId": "sunan_al_tirmidhi",
+      "collectionName": "Sunan Al-Tirmidhi",
+      "collectionNameArabic": "سنن الترمذي",
+      "filename": "sunan_al_tirmidhi.json",
+      "fileSizeMB": "10.38",
+      "hadithCount": 7782
+    },
+    {
+      "collectionId": "sunan_ibn_maja",
+      "collectionName": "Sunan Ibn-Maja",
+      "collectionNameArabic": "سنن ابن ماجه",
+      "filename": "sunan_ibn_maja.json",
+      "fileSizeMB": "7.37",
+      "hadithCount": 8664
+    }
+  ],
+  "summary": {
+    "totalHadiths": 124338,
+    "totalSizeMB": "121.56",
+    "largestFileMB": "47.43",
+    "averageFileSizeMB": "13.51"
+  }
+}

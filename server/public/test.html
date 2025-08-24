@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadith API Test Page</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 80vh;
+        }
+        
+        .left-panel {
+            padding: 30px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+        }
+        
+        .right-panel {
+            padding: 30px;
+            background: white;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 1.3em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .test-group {
+            margin-bottom: 20px;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 5px 5px 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .test-button:active {
+            transform: translateY(0);
+        }
+        
+        .test-button.secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+        
+        .test-button.success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+        
+        .test-button.warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .results {
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .results-header {
+            background: #34495e;
+            padding: 15px 20px;
+            border-bottom: 1px solid #4a5f7a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .results-content {
+            padding: 20px;
+        }
+        
+        .results pre {
+            margin: 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .loading {
+            display: none;
+            color: #3498db;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #e74c3c;
+            background: #fdf2f2;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .success {
+            color: #27ae60;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.online {
+            background: #27ae60;
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+        }
+        
+        .status-indicator.offline {
+            background: #e74c3c;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+        
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .arabic-text {
+            font-size: 16px;
+            line-height: 1.8;
+            direction: rtl;
+            text-align: right;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-right: 4px solid #3498db;
+            margin: 10px 0;
+        }
+        
+        .hadith-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .hadith-meta {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .pagination-info {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕌 Hadith API Test Suite</h1>
+            <p>Interactive testing interface for the Open Hadith Data API</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <!-- Status Section -->
+                <div class="section">
+                    <h3>🔍 API Status</h3>
+                    <div id="status">
+                        <span class="status-indicator offline"></span>
+                        <span id="status-text">Checking...</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Tests -->
+                <div class="section">
+                    <h3>⚡ Quick Tests</h3>
+                    <div class="test-group">
+                        <button class="test-button success" onclick="testHealth()">Health Check</button>
+                        <button class="test-button" onclick="testApiInfo()">API Info</button>
+                        <button class="test-button" onclick="testCollections()">Get Collections</button>
+                        <button class="test-button" onclick="testStats()">Statistics</button>
+                    </div>
+                </div>
+                
+                <!-- Collection Tests -->
+                <div class="section">
+                    <h3>📚 Collection Tests</h3>
+                    <div class="input-group">
+                        <label for="collectionSelect">Select Collection:</label>
+                        <select id="collectionSelect">
+                            <option value="">Loading collections...</option>
+                        </select>
+                    </div>
+                    <div class="test-group">
+                        <button class="test-button" onclick="testCollectionDetails()">Collection Details</button>
+                        <button class="test-button" onclick="testCollectionHadiths()">Get Hadiths (10)</button>
+                        <button class="test-button secondary" onclick="testCollectionHadithsWithDiacritics()">With Diacritics</button>
+                    </div>
+                </div>
+                
+                <!-- Search Tests -->
+                <div class="section">
+                    <h3>🔍 Search Tests</h3>
+                    <div class="input-group">
+                        <label for="searchQuery">Search Query:</label>
+                        <input type="text" id="searchQuery" placeholder="Enter Arabic or English text" value="الصلاة">
+                    </div>
+                    <div class="input-group">
+                        <label for="searchCollection">Collection (optional):</label>
+                        <select id="searchCollection">
+                            <option value="">All collections</option>
+                        </select>
+                    </div>
+                    <div class="test-group">
+                        <button class="test-button warning" onclick="testSearch()">Search</button>
+                        <button class="test-button secondary" onclick="testSearchExact()">Exact Search</button>
+                        <button class="test-button" onclick="testSearchSuggestions()">Suggestions</button>
+                    </div>
+                </div>
+                
+                <!-- Specific Hadith Test -->
+                <div class="section">
+                    <h3>📖 Specific Hadith</h3>
+                    <div class="input-group">
+                        <label for="hadithCollection">Collection:</label>
+                        <select id="hadithCollection">
+                            <option value="sahih_al_bukhari">Sahih Al-Bukhari</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="hadithId">Hadith ID:</label>
+                        <input type="number" id="hadithId" placeholder="Enter hadith ID" value="1">
+                    </div>
+                    <div class="test-group">
+                        <button class="test-button warning" onclick="testSpecificHadith()">Get Hadith</button>
+                        <button class="test-button secondary" onclick="testSpecificHadithWithDiacritics()">With Diacritics</button>
+                    </div>
+                </div>
+                
+                <!-- Advanced Tests -->
+                <div class="section">
+                    <h3>🔬 Advanced Tests</h3>
+                    <div class="test-group">
+                        <button class="test-button secondary" onclick="testDetailedHealth()">Detailed Health</button>
+                        <button class="test-button secondary" onclick="testStatsDistribution()">Distribution Stats</button>
+                        <button class="test-button secondary" onclick="testLargeSearch()">Large Result Set</button>
+                        <button class="test-button secondary" onclick="testPagination()">Test Pagination</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="results">
+                    <div class="results-header">
+                        <span>📋 API Response</span>
+                        <button class="clear-btn" onclick="clearResults()">Clear</button>
+                    </div>
+                    <div class="results-content">
+                        <div class="loading" id="loading">Loading...</div>
+                        <pre id="results">Welcome to the Hadith API Test Suite!
+
+Click any button on the left to test the API endpoints.
+
+The API provides access to 9 major Islamic Hadith collections:
+• Sahih Al-Bukhari
+• Sahih Muslim  
+• Sunan Abu-Dawud
+• Sunan Al-Tirmidhi
+• Sunan Al-Nasai
+• Sunan Ibn-Maja
+• Maliks Muwataa
+• Sunan Al-Darimi
+• Musnad Ahmad Ibn-Hanbal
+
+🔍 Try searching for: الصلاة (prayer), الصوم (fasting), or الحج (pilgrimage)</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1';
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkApiStatus();
+            loadCollections();
+        });
+        
+        // Utility functions
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function updateResults(data, url = '') {
+            hideLoading();
+            const timestamp = new Date().toLocaleTimeString();
+            const resultsElement = document.getElementById('results');
+            
+            let formattedResponse = '';
+            if (url) {
+                formattedResponse += `🔗 Request: ${url}\n`;
+                formattedResponse += `⏰ Time: ${timestamp}\n`;
+                formattedResponse += `${'='.repeat(50)}\n\n`;
+            }
+            
+            if (typeof data === 'object') {
+                formattedResponse += JSON.stringify(data, null, 2);
+            } else {
+                formattedResponse += data;
+            }
+            
+            resultsElement.textContent = formattedResponse;
+        }
+        
+        function updateError(error, url = '') {
+            hideLoading();
+            const timestamp = new Date().toLocaleTimeString();
+            const resultsElement = document.getElementById('results');
+            
+            let errorResponse = '';
+            if (url) {
+                errorResponse += `❌ Failed Request: ${url}\n`;
+                errorResponse += `⏰ Time: ${timestamp}\n`;
+                errorResponse += `${'='.repeat(50)}\n\n`;
+            }
+            
+            errorResponse += `Error: ${error.message || error}\n`;
+            if (error.status) {
+                errorResponse += `Status: ${error.status}\n`;
+            }
+            
+            resultsElement.textContent = errorResponse;
+        }
+        
+        async function makeRequest(url, options = {}) {
+            showLoading();
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw { ...data, status: response.status };
+                }
+                
+                updateResults(data, url);
+                return data;
+            } catch (error) {
+                updateError(error, url);
+                throw error;
+            }
+        }
+        
+        // Status check
+        async function checkApiStatus() {
+            try {
+                const response = await fetch('/health');
+                if (response.ok) {
+                    document.querySelector('.status-indicator').className = 'status-indicator online';
+                    document.getElementById('status-text').textContent = 'API Online';
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                document.querySelector('.status-indicator').className = 'status-indicator offline';
+                document.getElementById('status-text').textContent = 'API Offline';
+            }
+        }
+        
+        // Load collections for dropdowns
+        async function loadCollections() {
+            try {
+                const data = await fetch(`${API_BASE}/collections`);
+                const collections = await data.json();
+                
+                const selects = ['collectionSelect', 'searchCollection', 'hadithCollection'];
+                selects.forEach(selectId => {
+                    const select = document.getElementById(selectId);
+                    if (selectId === 'collectionSelect') {
+                        select.innerHTML = '<option value="">Select a collection</option>';
+                    } else if (selectId === 'searchCollection') {
+                        select.innerHTML = '<option value="">All collections</option>';
+                    } else {
+                        select.innerHTML = '';
+                    }
+                    
+                    collections.collections.forEach(collection => {
+                        const option = document.createElement('option');
+                        option.value = collection.collectionId;
+                        option.textContent = `${collection.collectionName} (${collection.totalHadiths.toLocaleString()} hadiths)`;
+                        select.appendChild(option);
+                    });
+                });
+            } catch (error) {
+                console.error('Failed to load collections:', error);
+            }
+        }
+        
+        // Test functions
+        async function testHealth() {
+            await makeRequest('/health');
+        }
+        
+        async function testDetailedHealth() {
+            await makeRequest('/health/detailed');
+        }
+        
+        async function testApiInfo() {
+            await makeRequest(`${API_BASE}`);
+        }
+        
+        async function testCollections() {
+            await makeRequest(`${API_BASE}/collections`);
+        }
+        
+        async function testStats() {
+            await makeRequest(`${API_BASE}/stats`);
+        }
+        
+        async function testStatsDistribution() {
+            await makeRequest(`${API_BASE}/stats/distribution`);
+        }
+        
+        async function testCollectionDetails() {
+            const collectionId = document.getElementById('collectionSelect').value;
+            if (!collectionId) {
+                alert('Please select a collection first');
+                return;
+            }
+            await makeRequest(`${API_BASE}/collections/${collectionId}`);
+        }
+        
+        async function testCollectionHadiths() {
+            const collectionId = document.getElementById('collectionSelect').value;
+            if (!collectionId) {
+                alert('Please select a collection first');
+                return;
+            }
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths?limit=10`);
+        }
+        
+        async function testCollectionHadithsWithDiacritics() {
+            const collectionId = document.getElementById('collectionSelect').value;
+            if (!collectionId) {
+                alert('Please select a collection first');
+                return;
+            }
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths?limit=5&fileType=mushakkala_mufassala`);
+        }
+        
+        async function testSearch() {
+            const query = document.getElementById('searchQuery').value;
+            const collection = document.getElementById('searchCollection').value;
+            if (!query.trim()) {
+                alert('Please enter a search query');
+                return;
+            }
+            
+            let url = `${API_BASE}/search?q=${encodeURIComponent(query)}&limit=10`;
+            if (collection) {
+                url += `&collection=${collection}`;
+            }
+            
+            await makeRequest(url);
+        }
+        
+        async function testSearchExact() {
+            const query = document.getElementById('searchQuery').value;
+            if (!query.trim()) {
+                alert('Please enter a search query');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/search?q=${encodeURIComponent(query)}&exact=true&limit=5`);
+        }
+        
+        async function testSearchSuggestions() {
+            const query = document.getElementById('searchQuery').value;
+            if (!query.trim() || query.length < 2) {
+                alert('Please enter at least 2 characters for suggestions');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/search/suggestions?q=${encodeURIComponent(query)}&limit=10`);
+        }
+        
+        async function testSpecificHadith() {
+            const collectionId = document.getElementById('hadithCollection').value;
+            const hadithId = document.getElementById('hadithId').value;
+            
+            if (!collectionId || !hadithId) {
+                alert('Please enter both collection and hadith ID');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths/${hadithId}`);
+        }
+        
+        async function testSpecificHadithWithDiacritics() {
+            const collectionId = document.getElementById('hadithCollection').value;
+            const hadithId = document.getElementById('hadithId').value;
+            
+            if (!collectionId || !hadithId) {
+                alert('Please enter both collection and hadith ID');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths/${hadithId}?fileType=mushakkala_mufassala`);
+        }
+        
+        async function testLargeSearch() {
+            await makeRequest(`${API_BASE}/search?q=الله&limit=50`);
+        }
+        
+        async function testPagination() {
+            const collectionId = document.getElementById('collectionSelect').value || 'sahih_al_bukhari';
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths?limit=20&offset=100`);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').textContent = 'Results cleared. Click any test button to start.';
+        }
+    </script>
+</body>
+</html>

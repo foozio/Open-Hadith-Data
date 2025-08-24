@@ -1,0 +1,149 @@
+{
+  "collections": [
+    {
+      "collectionId": "sahih_al_bukhari",
+      "collectionName": "Sahih Al-Bukhari",
+      "collectionNameArabic": "صحيح البخاري",
+      "files": [
+        {
+          "fileType": "regular",
+          "fileName": "sahih_al-bukhari_ahadith.utf8.csv",
+          "hadiths": [
+            {
+              "id": "1",
+              "text": " إنما الأعمال بالنيات وإنما لكل امرئ ما نوى فمن كانت هجرته إلى دنيا يصيبها أو إلى امرأة ينكحها فهجرته إلى ما هاجر إليه ",
+              "textLength": 123,
+              "hasFullDiacritics": false
+            },
+            {
+              "id": "2",
+              "text": " بينا نحن عند رسول الله صلى الله عليه وسلم ذات يوم إذ طلع علينا رجل شديد بياض الثياب شديد سواد الشعر لا يرى عليه أثر السفر ولا يعرفه منا أحد ",
+              "textLength": 145,
+              "hasFullDiacritics": false
+            }
+          ],
+          "count": 7008
+        },
+        {
+          "fileType": "mushakkala_mufassala",
+          "fileName": "sahih_al-bukhari_ahadith_mushakkala_mufassala.utf8.csv",
+          "hadiths": [
+            {
+              "id": "1",
+              "text": " إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى دُنْيَا يُصِيبُهَا أَوْ إِلَى امْرَأَةٍ يَنْكِحُهَا فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ ",
+              "textLength": 156,
+              "hasFullDiacritics": true
+            },
+            {
+              "id": "2", 
+              "text": " بَيْنَا نَحْنُ عِنْدَ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ ذَاتَ يَوْمٍ إِذْ طَلَعَ عَلَيْنَا رَجُلٌ شَدِيدُ بَيَاضِ الثِّيَابِ شَدِيدُ سَوَادِ الشَّعْرِ لَا يُرَى عَلَيْهِ أَثَرُ السَّفَرِ وَلَا يَعْرِفُهُ مِنَّا أَحَدٌ ",
+              "textLength": 178,
+              "hasFullDiacritics": true
+            }
+          ],
+          "count": 7009
+        }
+      ],
+      "totalHadiths": 14017
+    },
+    {
+      "collectionId": "sahih_muslim",
+      "collectionName": "Sahih Muslim", 
+      "collectionNameArabic": "صحيح مسلم",
+      "files": [
+        {
+          "fileType": "regular",
+          "fileName": "sahih_muslim_ahadith.utf8.csv",
+          "hadiths": [
+            {
+              "id": "1",
+              "text": " حدثنا يحيى بن يحيى التميمي قال قرأت على مالك عن يحيى بن سعيد عن محمد بن إبراهيم بن الحارث التيمي عن علقمة بن وقاص الليثي عن عمر بن الخطاب على المنبر قال سمعت رسول الله صلى الله عليه وسلم يقول إنما الأعمال بالنيات ",
+              "textLength": 234,
+              "hasFullDiacritics": false
+            }
+          ],
+          "count": 5362
+        },
+        {
+          "fileType": "mushakkala_mufassala",
+          "fileName": "sahih_muslim_ahadith_mushakkala_mufassala.utf8.csv",
+          "hadiths": [
+            {
+              "id": "1",
+              "text": " حَدَّثَنَا يَحْيَى بْنُ يَحْيَى التَّمِيمِيُّ قَالَ قَرَأْتُ عَلَى مَالِكٍ عَنْ يَحْيَى بْنِ سَعِيدٍ عَنْ مُحَمَّدِ بْنِ إِبْرَاهِيمَ بْنِ الْحَارِثِ التَّيْمِيِّ عَنْ عَلْقَمَةَ بْنِ وَقَّاصٍ اللَّيْثِيِّ عَنْ عُمَرَ بْنِ الْخَطَّابِ عَلَى الْمِنْبَرِ قَالَ سَمِعْتُ رَسُولَ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ يَقُولُ إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ ",
+              "textLength": 287,
+              "hasFullDiacritics": true
+            }
+          ],
+          "count": 5363
+        }
+      ],
+      "totalHadiths": 10725
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2024-08-24T12:00:00.000Z",
+    "version": "1.0.0",
+    "sourceFormat": "CSV",
+    "encoding": "UTF-8",
+    "totalCollections": 9,
+    "totalFiles": 18,
+    "totalHadiths": 77000,
+    "collections": [
+      {
+        "collectionId": "sahih_al_bukhari",
+        "collectionName": "Sahih Al-Bukhari",
+        "hadithCount": 14017,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "sahih_muslim", 
+        "collectionName": "Sahih Muslim",
+        "hadithCount": 10725,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "sunan_abu_dawud",
+        "collectionName": "Sunan Abu-Dawud", 
+        "hadithCount": 9181,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "sunan_al_tirmidhi",
+        "collectionName": "Sunan Al-Tirmidhi",
+        "hadithCount": 7783,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "sunan_al_nasai",
+        "collectionName": "Sunan Al-Nasai",
+        "hadithCount": 11325,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "sunan_ibn_maja",
+        "collectionName": "Sunan Ibn-Maja",
+        "hadithCount": 8665,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "maliks_muwataa",
+        "collectionName": "Maliks Muwataa",
+        "hadithCount": 3189,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "sunan_al_darimi",
+        "collectionName": "Sunan Al-Darimi",
+        "hadithCount": 6734,
+        "fileTypes": ["regular", "mushakkala_mufassala"]
+      },
+      {
+        "collectionId": "musnad_ahmad_ibn_hanbal",
+        "collectionName": "Musnad Ahmad Ibn-Hanbal",
+        "hadithCount": 52726,
+        "fileTypes": ["regular", "mushakkala"]
+      }
+    ]
+  }
+}

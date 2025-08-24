@@ -1,0 +1,181 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hadith Data Schema",
+  "description": "JSON schema for Islamic Hadith data converted from CSV format",
+  "type": "object",
+  "properties": {
+    "collections": {
+      "type": "array",
+      "description": "Array of Hadith collections",
+      "items": {
+        "$ref": "#/definitions/HadithCollection"
+      }
+    },
+    "metadata": {
+      "$ref": "#/definitions/Metadata"
+    }
+  },
+  "required": ["collections", "metadata"],
+  "definitions": {
+    "HadithCollection": {
+      "type": "object",
+      "description": "A single Hadith collection (e.g., Sahih Al-Bukhari)",
+      "properties": {
+        "collectionId": {
+          "type": "string",
+          "description": "Unique identifier for the collection",
+          "pattern": "^[a-z0-9_-]+$",
+          "examples": ["sahih_al_bukhari", "sahih_muslim", "sunan_abu_dawud"]
+        },
+        "collectionName": {
+          "type": "string",
+          "description": "Display name of the collection",
+          "examples": ["Sahih Al-Bukhari", "Sahih Muslim", "Sunan Abu-Dawud"]
+        },
+        "collectionNameArabic": {
+          "type": "string",
+          "description": "Arabic name of the collection",
+          "examples": ["صحيح البخاري", "صحيح مسلم", "سنن أبي داود"]
+        },
+        "files": {
+          "type": "array",
+          "description": "Array of file data within this collection",
+          "items": {
+            "$ref": "#/definitions/HadithFile"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "totalHadiths": {
+          "type": "integer",
+          "description": "Total number of hadiths across all files in this collection",
+          "minimum": 1
+        }
+      },
+      "required": ["collectionId", "collectionName", "files", "totalHadiths"]
+    },
+    "HadithFile": {
+      "type": "object",
+      "description": "Data from a single CSV file within a collection",
+      "properties": {
+        "fileType": {
+          "type": "string",
+          "description": "Type of the file content",
+          "enum": ["regular", "mushakkala_mufassala"],
+          "examples": ["regular", "mushakkala_mufassala"]
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Original CSV filename",
+          "pattern": "\\.csv$"
+        },
+        "hadiths": {
+          "type": "array",
+          "description": "Array of individual hadiths from this file",
+          "items": {
+            "$ref": "#/definitions/Hadith"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "description": "Number of hadiths in this file",
+          "minimum": 1
+        }
+      },
+      "required": ["fileType", "fileName", "hadiths", "count"]
+    },
+    "Hadith": {
+      "type": "object",
+      "description": "Individual Hadith entry",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Original ID from CSV file"
+        },
+        "text": {
+          "type": "string",
+          "description": "Arabic text of the hadith",
+          "minLength": 1
+        },
+        "textLength": {
+          "type": "integer",
+          "description": "Character length of the Arabic text",
+          "minimum": 1
+        },
+        "hasFullDiacritics": {
+          "type": "boolean",
+          "description": "Whether this hadith includes full diacritical marks"
+        }
+      },
+      "required": ["id", "text", "textLength", "hasFullDiacritics"]
+    },
+    "Metadata": {
+      "type": "object",
+      "description": "Metadata about the dataset",
+      "properties": {
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the JSON was generated"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the conversion schema",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "sourceFormat": {
+          "type": "string",
+          "enum": ["CSV"],
+          "description": "Original format of the data"
+        },
+        "encoding": {
+          "type": "string",
+          "enum": ["UTF-8"],
+          "description": "Text encoding used"
+        },
+        "totalCollections": {
+          "type": "integer",
+          "description": "Total number of hadith collections",
+          "minimum": 1
+        },
+        "totalFiles": {
+          "type": "integer",
+          "description": "Total number of CSV files processed",
+          "minimum": 1
+        },
+        "totalHadiths": {
+          "type": "integer",
+          "description": "Total number of hadiths across all collections",
+          "minimum": 1
+        },
+        "collections": {
+          "type": "array",
+          "description": "Summary of each collection",
+          "items": {
+            "type": "object",
+            "properties": {
+              "collectionId": { "type": "string" },
+              "collectionName": { "type": "string" },
+              "hadithCount": { "type": "integer" },
+              "fileTypes": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "required": ["collectionId", "collectionName", "hadithCount", "fileTypes"]
+          }
+        }
+      },
+      "required": [
+        "generatedAt", 
+        "version", 
+        "sourceFormat", 
+        "encoding", 
+        "totalCollections", 
+        "totalFiles", 
+        "totalHadiths",
+        "collections"
+      ]
+    }
+  }
+}
