@@ -396,17 +396,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Islamic Scholarship** for the compilation and preservation of Hadith collections
+- **Islamic Scholars** for the compilation and preservation of Hadith collections
 - **Open Source Community** for the amazing tools and frameworks
 - **Arabic Text Processing Community** for UTF-8 and RTL support guidance
 - **Contributors** who help improve and maintain this project
+- **Muhammad Hashim** for his early work on Hadith csv files
 
 ## 📞 Support
 
 - **Documentation**: Visit `/docs/` for comprehensive API documentation
-- **Issues**: Report bugs on [GitHub Issues](https://github.com/your-username/Open-Hadith-Data/issues)
-- **Discussions**: Join our [GitHub Discussions](https://github.com/your-username/Open-Hadith-Data/discussions)
-- **Email**: Contact the maintainers at [your-email@example.com]
+- **Issues**: Report bugs on [GitHub Issues](https://github.com/foozio/Open-Hadith-Data/issues)
+- **Discussions**: Join our [GitHub Discussions](https://github.com/foozio/Open-Hadith-Data/discussions)
+- **Email**: Contact the maintainers at [nuzlilatief@gmail.com]
 
 ---
 
