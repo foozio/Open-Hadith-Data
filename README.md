@@ -400,7 +400,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Open Source Community** for the amazing tools and frameworks
 - **Arabic Text Processing Community** for UTF-8 and RTL support guidance
 - **Contributors** who help improve and maintain this project
-- **Muhammad Hashim** for his early work on Hadith csv files
+- **Muhammad Hashim** for his early work on Hadith csv files [His GitHub](https://github.com/mhashim6)
 
 ## 📞 Support
 
