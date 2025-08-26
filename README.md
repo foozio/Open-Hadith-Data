@@ -9,7 +9,7 @@ A comprehensive RESTful API for accessing Islamic Hadith collections from nine m
 ## 📋 Features
 
 ### 🔍 **Comprehensive Hadith Access**
-- **124,338 Hadiths** from 9 major Islamic collections
+- **62,174 Hadiths** from 9 major Islamic collections
 - **Dual text versions**: With and without Arabic diacritics
 - **Collection-specific filtering** and pagination
 - **Advanced search** with relevance scoring

@@ -138,3 +138,7 @@ bower_components/
 # Optional cache directories
 .cache/
 .tmp/
+.vercel
+
+# Local Netlify folder
+.netlify

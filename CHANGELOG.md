@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Memory usage optimization (230MB for 124K+ hadiths)
 
 - **GitHub-Compatible File Structure**
-  - Split large dataset into manageable chunks:
+  - Split large dataset into manageable chunks (Dual-Text Version):
     - maliks_muwataa.json (2.48MB, 3,188 hadiths)
     - sahih_al_bukhari.json (15.11MB, 14,016 hadiths)
     - sahih_muslim.json (13.72MB, 10,724 hadiths)
