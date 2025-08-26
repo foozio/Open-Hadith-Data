@@ -47,7 +47,7 @@
   to = "/index.html"
   status = 200
 
-# Catch-all for all other paths
+# Catch-all for all other paths - this should be LAST
 [[redirects]]
   from = "/*"
   to = "/index.html"
