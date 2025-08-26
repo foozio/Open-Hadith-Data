@@ -5,6 +5,27 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Specific routes should be matched first
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[[redirects]]
+  from = "/ready"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[[redirects]]
+  from = "/alive"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[[redirects]]
+  from = "/health/detailed"
+  to = "/.netlify/functions/server"
+  status = 200
+
 [[redirects]]
   from = "/api/v1/*"
   to = "/.netlify/functions/server/:splat"
@@ -17,29 +38,16 @@
 
 [[redirects]]
   from = "/auth/*"
-  to = "/.netlify/functions/server/auth/:splat"
+  to = "/.netlify/functions/server/:splat"
   status = 200
 
-[[redirects]]
-  from = "/health"
-  to = "/.netlify/functions/server/health"
-  status = 200
-
-[[redirects]]
-  from = "/ready"
-  to = "/.netlify/functions/server/ready"
-  status = 200
-
-[[redirects]]
-  from = "/alive"
-  to = "/.netlify/functions/server/alive"
-  status = 200
-
+# Root path
 [[redirects]]
   from = "/"
   to = "/index.html"
   status = 200
 
+# Catch-all for all other paths
 [[redirects]]
   from = "/*"
   to = "/index.html"
