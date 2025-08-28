@@ -58,7 +58,68 @@ async function healthRoutes(fastify, options) {
     }
   }, async (request, reply) => {
     const pkg = require('../../package.json');
+    
+    // Check if hadithData is available
+    if (!fastify.hadithData) {
+      return {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        version: pkg.version,
+        data: {
+          loaded: false,
+          message: 'Data manager not initialized'
+        },
+        system: {
+          nodeVersion: process.version,
+          platform: process.platform,
+          architecture: process.arch
+        }
+      };
+    }
+    
+    // Check if data is loaded
+    if (!fastify.hadithData.loaded) {
+      return {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        version: pkg.version,
+        data: {
+          loaded: false,
+          message: 'Data still loading'
+        },
+        system: {
+          nodeVersion: process.version,
+          platform: process.platform,
+          architecture: process.arch
+        }
+      };
+    }
+    
     const stats = fastify.hadithData.getStats();
+    
+    // Check if stats are available
+    if (!stats) {
+      return {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        version: pkg.version,
+        data: {
+          loaded: true,
+          message: 'Stats not available'
+        },
+        system: {
+          nodeVersion: process.version,
+          platform: process.platform,
+          architecture: process.arch
+        }
+      };
+    }
+    
+    // Log stats for debugging
+    console.log('Stats:', JSON.stringify(stats, null, 2));
     
     return {
       status: 'healthy',
@@ -67,16 +128,16 @@ async function healthRoutes(fastify, options) {
       version: pkg.version,
       data: {
         loaded: fastify.hadithData.loaded,
-        totalCollections: stats.metadata.totalCollections,
-        totalHadiths: stats.metadata.totalHadiths,
-        indexSize: stats.indexSize,
-        lastUpdated: stats.metadata.generatedAt
+        totalCollections: stats.metadata?.totalCollections || 0,
+        totalHadiths: stats.metadata?.totalHadiths || 0,
+        indexSize: stats.indexSize || 0,
+        lastUpdated: stats.metadata?.generatedAt || 'Unknown'
       },
       system: {
         nodeVersion: process.version,
         platform: process.platform,
         architecture: process.arch,
-        memory: stats.memoryUsage
+        memory: process.memoryUsage()
       }
     };
   });

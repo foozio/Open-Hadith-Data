@@ -84,6 +84,51 @@ A comprehensive RESTful API for accessing Islamic Hadith collections from nine m
    - **Dashboard**: http://localhost:3000/dashboard.html
    - **API Tester**: http://localhost:3000/test.html
 
+## ☁️ Deployment
+
+### Deploy to Vercel
+
+1. **Prepare for deployment**
+   ```bash
+   # Make sure all dependencies are installed
+   npm install
+   ```
+
+2. **Deploy using Vercel CLI**
+   ```bash
+   # Install Vercel CLI if not already installed
+   npm install -g vercel
+   
+   # Deploy to Vercel
+   vercel --prod
+   ```
+
+3. **Configure environment variables in Vercel dashboard**
+   - Go to your project settings in Vercel
+   - Add the following environment variables:
+     ```
+     NODE_ENV=production
+     JWT_SECRET=your-production-jwt-secret
+     GOOGLE_CLIENT_ID=your-google-client-id
+     GOOGLE_CLIENT_SECRET=your-google-client-secret
+     GOOGLE_REDIRECT_URI=https://your-domain.vercel.app/auth/google/callback
+     ```
+
+### Deploy to Netlify
+
+1. **Deploy using Netlify CLI**
+   ```bash
+   # Install Netlify CLI if not already installed
+   npm install -g netlify-cli
+   
+   # Deploy to Netlify
+   netlify deploy --prod
+   ```
+
+2. **Configure environment variables in Netlify dashboard**
+   - Go to your site settings in Netlify
+   - Add the environment variables in the "Environment" section
+
 ## 🔧 Configuration
 
 ### Environment Variables
@@ -120,8 +165,9 @@ ADMIN_EMAILS=admin@example.com,your-email@gmail.com
 2. Create a new project or select existing
 3. Enable Google+ API
 4. Create OAuth 2.0 credentials
-5. Add `http://localhost:3000/auth/google/callback` to authorized redirect URIs
-6. Copy Client ID and Secret to `.env` file
+5. Add `http://localhost:3000/auth/google/callback` to authorized redirect URIs for local development
+6. For production deployment, also add your domain URL (e.g., `https://your-domain.vercel.app/auth/google/callback`)
+7. Copy Client ID and Secret to your environment variables
 
 ## 📖 API Documentation
 
@@ -188,7 +234,7 @@ GET /api/v1/stats/distribution
 ```
 
 ### Response Format
-```json
+```
 {
   "hadiths": [
     {

@@ -7,6 +7,158 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.7] - 2025-08-26 🛠️ Health Endpoint Debugging Enhancement
+
+### Fixed
+- **Enhanced Health Endpoint Debugging**
+  - Added detailed debugging information to help diagnose data loading issues
+  - Improved error handling and messaging for different data loading states
+  - Added logging for stats object to help with troubleshooting
+
+### Technical
+- ✅ Better visibility into data loading process
+- ✅ More informative error messages for troubleshooting
+- ✅ Enhanced debugging capabilities for health endpoints
+
+---
+
+## [1.5.6] - 2025-08-26 🛠️ Enhanced Health Endpoint Robustness
+
+### Fixed
+- **Improved Health Endpoint Error Handling**
+  - Enhanced detailed health endpoint to handle cases where hadithData or stats are not yet available
+  - Added proper null checks for data manager initialization
+  - Improved informative messages for different loading states
+
+### Technical
+- ✅ Better error resilience in health monitoring
+- ✅ More informative health endpoint responses during startup
+- ✅ Graceful handling of uninitialized components
+
+---
+
+## [1.5.5] - 2025-08-26 🛠️ Health Endpoint Improvements
+
+### Fixed
+- **Detailed Health Endpoint Data Handling**
+  - Added proper error handling for cases where hadithData is not yet loaded
+  - Fixed empty data and system objects in detailed health response
+  - Improved robustness of health check endpoints
+
+### Technical
+- ✅ Graceful handling of uninitialized data in health checks
+- ✅ More informative health endpoint responses
+- ✅ Better error resilience in health monitoring
+
+---
+
+## [1.5.4] - 2025-08-26 🛠️ Vercel Routing Order Fix
+
+### Fixed
+- **Vercel Health Endpoint Routing**
+  - Corrected routing order in `vercel.json` to ensure health endpoints are processed before catch-all route
+  - Fixed "Unexpected token 'T', "The page c"... is not valid JSON" error for /health endpoint
+  - Ensured API routes take precedence over static file serving
+
+### Technical
+- ✅ Proper routing precedence for Vercel deployments
+- ✅ Health endpoint accessibility
+- ✅ API endpoint routing consistency
+
+---
+
+## [1.5.3] - 2025-08-26 🛠️ Public Directory Setup Automation
+
+### Added
+- **Automated Public Directory Setup**
+  - Created `scripts/setup-public-dir.js` to automate public directory creation
+  - Added `postinstall` script to `package.json` to run setup automatically
+  - Ensures static files are properly copied to the public directory
+
+### Changed
+- **Deployment Reliability**
+  - Improved Vercel deployment consistency
+  - Enhanced static file handling for cloud deployments
+  - Automated setup reduces manual configuration errors
+
+### Technical
+- ✅ Automatic public directory setup during installation
+- ✅ Static file copying automation
+- ✅ Cross-platform compatibility
+
+---
+
+## [1.5.2] - 2025-08-26 📁 Vercel Static Files Configuration
+
+### Changed
+- **Static Files Structure**
+  - Created top-level `public` directory for Vercel compatibility
+  - Moved static files from `server/public` to `public`
+  - Updated server configuration to serve static files from new location
+  - Updated `vercel.json` routing to reference the top-level public directory
+
+### Fixed
+- **Vercel Deployment Issue**
+  - Resolved "No Output Directory named 'public' found" error
+  - Fixed static file serving for Vercel deployment
+  - Maintained backward compatibility with local development
+
+### Technical
+- ✅ Vercel deployment compatibility
+- ✅ Static file serving from correct directory
+- ✅ Route configuration updates
+
+---
+
+## [1.5.1] - 2025-08-26 🛠️ Vercel Configuration Update
+
+### Changed
+- **Vercel Configuration Enhancement**
+  - Updated `vercel.json` to use the newer format without `builds` section
+  - Added `build` script to `package.json` for Vercel compatibility
+  - Improved Vercel deployment documentation in README
+
+### Technical
+- ✅ Resolved Vercel warning about unused build settings
+- ✅ Enhanced compatibility with Vercel's build system
+- ✅ Maintained multi-platform deployment support
+
+---
+
+## [1.5.0] - 2025-08-26 ☁️ Vercel Deployment Support
+
+### Added
+- **Vercel Deployment Configuration**
+  - Created `server.js` serverless function entry point
+  - Updated `vercel.json` with proper routing rules for API endpoints
+  - Added `.node-version` file to specify Node.js version (18)
+  - Enhanced `.vercelignore` to exclude unnecessary files from deployment
+
+- **Multi-Platform Deployment Support**
+  - Maintained existing Netlify deployment configuration
+  - Added comprehensive deployment instructions for both Vercel and Netlify
+  - Updated README with detailed deployment guides
+
+### Changed
+- **Serverless Function Architecture**
+  - Created unified serverless entry point compatible with both Netlify and Vercel
+  - Improved path forwarding configuration for serverless environments
+  - Enhanced request handling for cloud deployment platforms
+
+### Technical
+- ✅ Serverless function compatibility with Vercel's Node.js runtime
+- ✅ Proper routing of API, auth, and health endpoints
+- ✅ Environment variable support for production deployments
+- ✅ Optimized file exclusion for faster deployments
+
+### Verified
+- ✓ Vercel deployment configuration
+- ✓ API endpoint routing
+- ✓ Authentication flow compatibility
+- ✓ Static file serving
+
+---
+
 ## [1.4.0] - 2025-08-24 📦 Data File Splitting Solution & GitHub Compatibility
 
 ### Added
@@ -197,191 +349,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `GET /api/v1/collections/{id}` - Get specific collection
     - `GET /api/v1/collections/{id}/hadiths` - Get hadiths with pagination
     - `GET /api/v1/collections/{id}/hadiths/{hadithId}` - Get specific hadith
-
-  - **Search API**
-    - `GET /api/v1/search` - Full-text search across collections
-    - `GET /api/v1/search/suggestions` - Search autocomplete
-    - `POST /api/v1/search/advanced` - Advanced search with criteria
-
-  - **Statistics API**
-    - `GET /api/v1/stats` - Comprehensive data statistics
-    - `GET /api/v1/stats/collections/{id}` - Collection-specific stats
-    - `GET /api/v1/stats/distribution` - Text length distribution
-
-  - **Health Monitoring**
-    - `GET /health` - Basic health check
-    - `GET /health/detailed` - Detailed system health
-
-- **Data Management System**
-  - **HadithDataManager Class**
-    - Efficient data loading and caching
-    - Collection indexing for O(1) access
-    - Search indexing for fast queries
-    - Memory usage optimization
-
-  - **Search Capabilities**
-    - Fuzzy text search with relevance scoring
-    - Collection-specific filtering
-    - File type filtering (regular/mushakkala_mufassala)
-    - Pagination support with metadata
-
-- **API Documentation**
-  - Comprehensive static documentation at `/docs/`
-  - Interactive API reference
-  - Usage examples and response formats
-  - Collection information with Arabic names
-
-- **Test Interface**
-  - **Comprehensive Test Page** (`/test.html`)
-    - Interactive API testing interface
-    - Arabic text input support
-    - Real-time response display
-    - Error handling and validation
-    - All endpoints testing capability
-
-### Technical Infrastructure
-- **Server Configuration**
-  - Fastify framework with plugins
-  - CORS support for cross-origin requests
-  - Security headers with Helmet
-  - Rate limiting (100 requests/minute)
-  - Static file serving (root and `/docs/` prefix)
-
-- **Data Architecture**
-  - Plugin-based modular architecture
-  - JSON data format with metadata
-  - Efficient caching and indexing
-  - Graceful error handling
-
-- **Development Environment**
-  - Nodemon for automatic restarts
-  - Environment-based configuration
-  - Comprehensive logging with Pino
-  - Package.json scripts for development
-
-### Collections Included
-- 📚 Sahih Al-Bukhari (صحيح البخاري)
-- 📚 Sahih Muslim (صحيح مسلم)  
-- 📚 Sunan Abu-Dawud (سنن أبي داود)
-- 📚 Sunan Al-Tirmidhi (سنن الترمذي)
-- 📚 Sunan Al-Nasai (سنن النسائي)
-- 📚 Sunan Ibn-Maja (سنن ابن ماجه)
-- 📚 Maliks Muwataa (موطأ مالك)
-- 📚 Sunan Al-Darimi (سنن الدارمي)
-- 📚 Musnad Ahmad Ibn-Hanbal (مسند أحمد بن حنبل)
-
----
-
-## Development Stack & Dependencies
-
-### Core Technologies
-- **Backend**: Node.js with Fastify framework
-- **Authentication**: JWT tokens with manual OAuth implementation
-- **Data Storage**: JSON files with in-memory caching
-- **Frontend**: Vanilla JavaScript with responsive CSS
-
-### Key Dependencies
-```json
-{
-  "fastify": "^4.24.3",
-  "@fastify/cors": "^8.4.0",
-  "@fastify/helmet": "^11.1.1",
-  "@fastify/static": "^6.12.0",
-  "@fastify/rate-limit": "^9.0.1",
-  "jsonwebtoken": "^9.0.2",
-  "dotenv": "^17.2.1",
-  "uuid": "^11.1.0",
-  "bcryptjs": "^3.0.2"
-}
-```
-
-### Development Tools
-- **Process Management**: Nodemon for auto-restart
-- **Testing**: Jest framework (configured)
-- **Logging**: Pino with pretty printing
-- **Code Quality**: ESLint configuration ready
-
----
-
-## Infrastructure & Deployment
-
-### Environment Configuration
-- **Development**: `npm run dev` (Port 3000)
-- **Production**: `npm start`
-- **Environment Variables**: `.env` file support
-- **Logging**: Configurable log levels
-
-### Security Features
-- 🔒 JWT-based authentication
-- 🔒 Rate limiting per IP/API key
-- 🔒 CORS configuration
-- 🔒 Security headers (Helmet)
-- 🔒 Input validation and sanitization
-- 🔒 Role-based access control
-
-### Performance Optimizations
-- ⚡ In-memory data caching
-- ⚡ Efficient indexing algorithms
-- ⚡ Pagination for large datasets
-- ⚡ Optimized search with relevance scoring
-- ⚡ Lazy loading where applicable
-
----
-
-## Future Roadmap
-
-### Planned Features
-- [ ] Database integration (PostgreSQL/MongoDB)
-- [ ] Advanced search with AI/ML
-- [ ] API versioning system
-- [ ] Comprehensive test coverage
-- [ ] Docker containerization
-- [ ] CI/CD pipeline setup
-- [ ] Performance monitoring
-- [ ] Caching layer (Redis)
-- [ ] API usage analytics
-- [ ] Multi-language support
-
-### Potential Improvements
-- [ ] GraphQL API option
-- [ ] Real-time subscriptions
-- [ ] Advanced authentication (2FA)
-- [ ] API marketplace integration
-- [ ] Mobile application
-- [ ] Data export features
-- [ ] Backup and restore system
-
----
-
-## Contributing
-
-### Development Process
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add some amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Code Standards
-- Follow existing code style
-- Add tests for new features
-- Update documentation
-- Ensure all tests pass
-- Use meaningful commit messages
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Islamic scholarship for the compilation of Hadith collections
-- Open source community for tools and frameworks
-- Contributors and maintainers of the project
-- Arabic text processing community
-
----
-
-*This changelog is automatically maintained and reflects all significant changes to the project.*

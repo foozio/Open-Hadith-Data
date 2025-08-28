@@ -6,8 +6,10 @@
   "scripts": {
     "convert": "node scripts/csv-to-json-converter.js",
     "convert:watch": "nodemon scripts/csv-to-json-converter.js",
+    "postinstall": "node scripts/setup-public-dir.js",
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
+    "build": "echo 'No build required'",
     "test": "jest",
     "test:watch": "jest --watch"
   },

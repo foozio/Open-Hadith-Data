@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadith API Dashboard - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light theme colors */
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --warning-color: #d97706;
+            --success-color: #059669;
+            
+            /* Islamic-inspired colors */
+            --islamic-gold: #d4af37;
+            --islamic-green: #228b22;
+            --islamic-blue: #4682b4;
+            --islamic-teal: #008b8b;
+            
+            /* Neutral colors */
+            --background: #ffffff;
+            --surface: #f8fafc;
+            --surface-elevated: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--islamic-blue) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--islamic-green) 0%, var(--islamic-teal) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--islamic-gold) 0%, #b8860b 100%);
+            --gradient-background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-elevated: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+            --gradient-background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--gradient-background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .islamic-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--islamic-gold) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, var(--islamic-teal) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            background: var(--surface-elevated);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header-icon {
+            width: 3rem;
+            height: 3rem;
+            background: var(--gradient-primary);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+        
+        .header-text h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .header-text p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        
+        .theme-toggle:hover {
+            background: var(--border-light);
+            transform: translateY(-1px);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--surface);
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+        }
+        
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--gradient-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .user-details h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .logout-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logout-btn:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .card {
+            background: var(--surface-elevated);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+        
+        .card h2 {
+            margin: 0 0 1.5rem 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .card h2::before {
+            content: '';
+            width: 2rem;
+            height: 2rem;
+            background: var(--gradient-primary);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--surface-elevated);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+        
+        .stat-card:nth-child(2)::before {
+            background: var(--gradient-secondary);
+        }
+        
+        .stat-card:nth-child(3)::before {
+            background: var(--gradient-accent);
+        }
+        
+        .stat-card:nth-child(4)::before {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #ea580c 100%);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .stat-card:nth-child(1) .stat-icon {
+            background: var(--gradient-primary);
+        }
+        
+        .stat-card:nth-child(2) .stat-icon {
+            background: var(--gradient-secondary);
+        }
+        
+        .stat-card:nth-child(3) .stat-icon {
+            background: var(--gradient-accent);
+        }
+        
+        .stat-card:nth-child(4) .stat-icon {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #ea580c 100%);
+        }
+        
+        .stat-card h3 {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .stat-change.positive {
+            color: var(--success-color);
+        }
+        
+        .stat-change.negative {
+            color: var(--accent-color);
+        }
+        
+        .stat-change.neutral {
+            color: var(--text-muted);
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 5px 5px 0;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn.success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+        
+        .btn.danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        
+        .btn.secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+        
+        .tokens-list {
+            margin-top: 20px;
+        }
+        
+        .token-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .token-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .token-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        
+        .token-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        
+        .token-status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .token-status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .token-key {
+            font-family: 'Monaco', 'Consolas', monospace;
+            background: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        
+        .token-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        
+        .token-detail {
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .token-detail strong {
+            color: #2c3e50;
+        }
+        
+        .token-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 15px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        
+        .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #3498db;
+            font-style: italic;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .section-icon {
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+        
+        /* Token Management */
+        .token-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .token-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .token-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+        
+        .token-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .token-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .token-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: #10b981;
+            color: white;
+        }
+        
+        .token-key {
+            font-family: 'Courier New', monospace;
+            background: var(--bg-secondary);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .token-metadata {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .token-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .token-meta-item i {
+            color: var(--primary-color);
+        }
+        
+        .token-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .token-actions .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Analytics Section */
+        .analytics-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .time-filter {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .analytics-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .analytics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .analytics-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .analytics-icon {
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+        
+        .analytics-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .analytics-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .trend-positive {
+            color: #10b981;
+        }
+        
+        .trend-negative {
+            color: #ef4444;
+        }
+        
+        .trend-neutral {
+            color: var(--text-secondary);
+        }
+        
+        .chart-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .chart-placeholder {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--border-color);
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .user-info {
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+            
+            .analytics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .token-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .token-actions {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .token-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .token-metadata {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .token-actions {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .stat-card {
+                padding: 1.25rem;
+            }
+            
+            .analytics-card {
+                padding: 1.25rem;
+            }
+            
+            .analytics-value {
+                font-size: 1.75rem;
+            }
+            
+            .token-item {
+                padding: 1.25rem;
+            }
+            
+            .section-header {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="islamic-pattern"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-icon">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Hadith API Dashboard</h1>
+                    <p>Administrative Control Panel</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <div class="user-avatar">AU</div>
+                    <div class="user-details">
+                        <h3 id="userName">Loading...</h3>
+                        <p id="userEmail">Loading...</p>
+                    </div>
+                </div>
+                
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+            <div id="loginPrompt">
+                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 400px; margin: 0 auto;">
+                    <h3 style="margin-top: 0; text-align: center;">🔐 Login to API Dashboard</h3>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" required value="admin@example.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" required value="admin123" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%; margin: 10px 0;">Login</button>
+                    </form>
+                    
+                    <div style="text-align: center; margin: 20px 0; position: relative;">
+                        <hr style="border: none; border-top: 1px solid #e9ecef;">
+                        <span style="background: white; color: #7f8c8d; padding: 0 10px; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);">OR</span>
+                    </div>
+                    
+                    <a href="/auth/google" class="btn" style="width: 100%; margin: 10px 0; background: #4285f4; border-color: #4285f4; text-decoration: none; display: inline-block; text-align: center;">
+                        🌐 Login with Google
+                    </a>
+                    <div class="alert info">
+                        <strong>Demo Credentials:</strong><br>
+                        Email: admin@example.com<br>
+                        Password: admin123
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent" style="display: none;">
+            <!-- Statistics Card -->
+            <div class="card">
+                <h2>📊 Overview</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Active Tokens</h3>
+                            <div class="stat-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalTokens">-</div>
+                            <div class="stat-change neutral">
+                                <i class="fas fa-minus"></i>
+                                Loading...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Requests</h3>
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalRequests">-</div>
+                            <div class="stat-change neutral">
+                                <i class="fas fa-minus"></i>
+                                Loading...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" onclick="refreshStats()">Refresh Stats</button>
+                <a href="/test.html" class="btn secondary">API Tester</a>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="card">
+                <h2>⚡ Quick Actions</h2>
+                <button class="btn success" onclick="openCreateTokenModal()">Create New Token</button>
+                <button class="btn" onclick="loadTokens()">Refresh Tokens</button>
+                <a href="/docs/" class="btn secondary" target="_blank">API Documentation</a>
+            </div>
+
+            <!-- API Tokens Card -->
+            <div class="card full-width">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        API Token Management
+                    </div>
+                    <button class="add-token-btn" onclick="createNewToken()">
+                        <i class="fas fa-plus"></i>
+                        Create New Token
+                    </button>
+                </div>
+                
+                <div id="tokensLoading" class="loading">Loading tokens...</div>
+                <div class="token-list" id="tokensContainer">
+                    <!-- Tokens will be loaded here dynamically -->
+                    <div class="token-item">
+                        <div class="token-info">
+                            <div class="token-header">
+                                <div class="token-name">Production API Key</div>
+                                <div class="token-status active">Active</div>
+                            </div>
+                            <div class="token-details">
+                                <div class="token-key">hd_prod_••••••••••••••••••••••••••••••••</div>
+                                <div class="token-meta">
+                                    <span><i class="fas fa-calendar"></i> Created: Jan 15, 2024</span>
+                                    <span><i class="fas fa-clock"></i> Last used: 2 hours ago</span>
+                                    <span><i class="fas fa-chart-bar"></i> 1,247 requests</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="token-actions">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-copy"></i>
+                                Copy
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
+                                Edit
+                            </button>
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="token-item">
+                        <div class="token-info">
+                            <div class="token-header">
+                                <div class="token-name">Development API Key</div>
+                                <div class="token-status active">Active</div>
+                            </div>
+                            <div class="token-details">
+                                <div class="token-key">hd_dev_••••••••••••••••••••••••••••••••••</div>
+                                <div class="token-meta">
+                                    <span><i class="fas fa-calendar"></i> Created: Dec 20, 2023</span>
+                                    <span><i class="fas fa-clock"></i> Last used: 1 day ago</span>
+                                    <span><i class="fas fa-chart-bar"></i> 456 requests</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="token-actions">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-copy"></i>
+                                Copy
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
+                                Edit
+                            </button>
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Usage Analytics Card -->
+            <div class="card full-width">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        Usage Analytics
+                    </div>
+                    <div class="time-filter">
+                        <select class="filter-select">
+                            <option value="7d">Last 7 days</option>
+                            <option value="30d" selected>Last 30 days</option>
+                            <option value="90d">Last 90 days</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="analyticsLoading" class="loading">Loading analytics...</div>
+                <div id="analyticsContainer" class="analytics-content">
+                    <!-- Sample analytics data -->
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <div class="analytics-title">Total Requests</div>
+                                <i class="fas fa-arrow-up trend-up"></i>
+                            </div>
+                            <div class="analytics-value">12,847</div>
+                            <div class="analytics-change positive">+23% from last month</div>
+                        </div>
+                        
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <div class="analytics-title">Unique Users</div>
+                                <i class="fas fa-arrow-up trend-up"></i>
+                            </div>
+                            <div class="analytics-value">1,234</div>
+                            <div class="analytics-change positive">+15% from last month</div>
+                        </div>
+                        
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <div class="analytics-title">Popular Collections</div>
+                                <i class="fas fa-minus trend-neutral"></i>
+                            </div>
+                            <div class="analytics-value">Bukhari</div>
+                            <div class="analytics-change neutral">Most requested</div>
+                        </div>
+                        
+                        <div class="analytics-card">
+                            <div class="analytics-header">
+                                <div class="analytics-title">Avg Response Time</div>
+                                <i class="fas fa-arrow-down trend-down"></i>
+                            </div>
+                            <div class="analytics-value">145ms</div>
+                            <div class="analytics-change positive">-12ms from last month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Request Volume Over Time</h3>
+                        </div>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-area"></i>
+                            <p>Chart visualization would appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Token Modal -->
+    <div id="createTokenModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New API Token</h3>
+                <button class="close" onclick="closeCreateTokenModal()">&times;</button>
+            </div>
+            <form id="createTokenForm">
+                <div class="form-group">
+                    <label for="tokenName">Token Name *</label>
+                    <input type="text" id="tokenName" name="name" required placeholder="e.g., My App Token">
+                </div>
+                
+                <div class="form-group">
+                    <label>Permissions</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="permRead" name="permissions" value="read" checked>
+                            <label for="permRead">Read</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="permWrite" name="permissions" value="write">
+                            <label for="permWrite">Write</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="permAdmin" name="permissions" value="admin">
+                            <label for="permAdmin">Admin</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rateLimit">Rate Limit (requests per window)</label>
+                    <input type="number" id="rateLimit" name="rateLimit" min="1" max="10000" value="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rateLimitWindow">Rate Limit Window</label>
+                    <select id="rateLimitWindow" name="rateLimitWindow">
+                        <option value="1 minute">1 minute</option>
+                        <option value="1 hour" selected>1 hour</option>
+                        <option value="1 day">1 day</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="allowedOrigins">Allowed Origins (one per line, optional)</label>
+                    <textarea id="allowedOrigins" name="allowedOrigins" rows="3" placeholder="https://example.com&#10;https://myapp.com"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn secondary" onclick="closeCreateTokenModal()">Cancel</button>
+                    <button type="submit" class="btn success">Create Token</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Token Display Modal -->
+    <div id="tokenDisplayModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✅ Token Created Successfully</h3>
+                <button class="close" onclick="closeTokenDisplayModal()">&times;</button>
+            </div>
+            <div class="alert info">
+                <strong>Important:</strong> This is the only time you'll see the full token. Please copy and store it securely.
+            </div>
+            <div class="form-group">
+                <label>Your API Token:</label>
+                <div style="position: relative;">
+                    <input type="text" id="newTokenKey" readonly style="font-family: monospace; background: #f8f9fa;">
+                    <button type="button" class="btn" onclick="copyToken()" style="position: absolute; right: 5px; top: 5px; padding: 5px 10px;">Copy</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Usage Example:</label>
+                <textarea readonly rows="4" id="tokenUsageExample" style="font-family: monospace; background: #f8f9fa;"></textarea>
+            </div>
+            <div style="text-align: center;">
+                <button type="button" class="btn" onclick="closeTokenDisplayModal()">I've Saved the Token</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let tokens = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for OAuth redirect parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('sessionId');
+            const token = urlParams.get('token');
+            const loginSuccess = urlParams.get('loginSuccess');
+            const error = urlParams.get('error');
+            const message = urlParams.get('message');
+            
+            if (error) {
+                showAlert('Login failed: ' + (message ? decodeURIComponent(message) : error), 'error');
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (sessionId && token && loginSuccess) {
+                // Store OAuth session
+                localStorage.setItem('sessionId', sessionId);
+                localStorage.setItem('token', token);
+                showAlert('Successfully logged in with Google!', 'success');
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            checkAuthStatus();
+        });
+        
+        // Show alert helper
+        function showAlert(message, type) {
+            const loginPrompt = document.getElementById('loginPrompt');
+            if (loginPrompt) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert ${type}`;
+                alertDiv.innerHTML = message;
+                loginPrompt.insertBefore(alertDiv, loginPrompt.firstChild);
+                
+                // Remove alert after 5 seconds
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 5000);
+            }
+        }
+
+        // Check authentication status
+        async function checkAuthStatus() {
+            try {
+                const sessionId = localStorage.getItem('sessionId');
+                if (!sessionId) {
+                    showLoginPrompt();
+                    return;
+                }
+                
+                const response = await fetch(`/auth/status?sessionId=${sessionId}`);
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    currentUser = data.user;
+                    showDashboard();
+                    loadTokens();
+                    loadStats();
+                } else {
+                    localStorage.removeItem('sessionId');
+                    showLoginPrompt();
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                localStorage.removeItem('sessionId');
+                showLoginPrompt();
+            }
+        }
+
+        // Handle login form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    try {
+                        const response = await fetch('/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ email, password })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            currentUser = data.user;
+                            localStorage.setItem('sessionId', data.sessionId);
+                            showDashboard();
+                            loadTokens();
+                            loadStats();
+                        } else {
+                            alert('Login failed: ' + data.message);
+                        }
+                    } catch (error) {
+                        alert('Login failed: ' + error.message);
+                    }
+                });
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginPrompt').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'grid';
+            
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userAvatar').src = currentUser.picture;
+        }
+
+        function showLoginPrompt() {
+            document.getElementById('loginPrompt').style.display = 'block';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'none';
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const sessionId = localStorage.getItem('sessionId');
+                if (sessionId) {
+                    await fetch('/auth/logout', { 
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Session-Id': sessionId
+                        }
+                    });
+                }
+                localStorage.removeItem('sessionId');
+                window.location.reload();
+            } catch (error) {
+                console.error('Logout failed:', error);
+                localStorage.removeItem('sessionId');
+                window.location.reload();
+            }
+        }
+
+        // Load tokens
+        async function loadTokens() {
+            const container = document.getElementById('tokensContainer');
+            const loading = document.getElementById('tokensLoading');
+            
+            loading.style.display = 'block';
+            container.innerHTML = '';
+            
+            try {
+                const sessionId = localStorage.getItem('sessionId');
+                const headers = {};
+                if (sessionId) {
+                    headers['X-Session-Id'] = sessionId;
+                }
+                
+                const response = await fetch('/auth/tokens', { headers });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    tokens = data.tokens || [];
+                    displayTokens();
+                } else {
+                    container.innerHTML = `<div class="alert error">${data.message || 'Failed to load tokens'}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="alert error">Failed to load tokens: ${error.message}</div>`;
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayTokens() {
+            const container = document.getElementById('tokensContainer');
+            
+            if (tokens.length === 0) {
+                container.innerHTML = `
+                    <div class="alert info">
+                        No API tokens found. Create your first token to get started!
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = tokens.map(token => `
+                <div class="token-item">
+                    <div class="token-header">
+                        <div class="token-name">${escapeHtml(token.name)}</div>
+                        <span class="token-status ${token.isActive ? 'active' : 'inactive'}">
+                            ${token.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                    <div class="token-key">${escapeHtml(token.key)}</div>
+                    <div class="token-details">
+                        <div class="token-detail">
+                            <strong>Permissions:</strong><br>
+                            ${token.permissions.join(', ')}
+                        </div>
+                        <div class="token-detail">
+                            <strong>Rate Limit:</strong><br>
+                            ${token.rateLimit} per ${token.rateLimitWindow}
+                        </div>
+                        <div class="token-detail">
+                            <strong>Usage:</strong><br>
+                            ${token.usageCount} requests
+                        </div>
+                        <div class="token-detail">
+                            <strong>Created:</strong><br>
+                            ${new Date(token.createdAt).toLocaleDateString()}
+                        </div>
+                        <div class="token-detail">
+                            <strong>Last Used:</strong><br>
+                            ${token.lastUsedAt ? new Date(token.lastUsedAt).toLocaleDateString() : 'Never'}
+                        </div>
+                    </div>
+                    <div class="token-actions">
+                        <button class="btn secondary" onclick="viewTokenStats('${token.id}')">View Stats</button>
+                        <button class="btn" onclick="editToken('${token.id}')">Edit</button>
+                        <button class="btn danger" onclick="deleteToken('${token.id}', '${escapeHtml(token.name)}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const sessionId = localStorage.getItem('sessionId');
+                const headers = {};
+                if (sessionId) {
+                    headers['X-Session-Id'] = sessionId;
+                }
+                
+                const response = await fetch('/auth/tokens', { headers });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const totalRequests = (data.tokens || []).reduce((sum, token) => sum + (token.usageCount || 0), 0);
+                    document.getElementById('totalTokens').textContent = (data.tokens || []).length;
+                    document.getElementById('totalRequests').textContent = totalRequests.toLocaleString();
+                } else {
+                    // Show default values if can't load stats
+                    document.getElementById('totalTokens').textContent = '0';
+                    document.getElementById('totalRequests').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+                document.getElementById('totalTokens').textContent = '0';
+                document.getElementById('totalRequests').textContent = '0';
+            }
+        }
+
+        function refreshStats() {
+            loadStats();
+            loadTokens();
+        }
+
+        // Modal functions
+        function openCreateTokenModal() {
+            document.getElementById('createTokenModal').style.display = 'block';
+        }
+
+        function closeCreateTokenModal() {
+            document.getElementById('createTokenModal').style.display = 'none';
+            document.getElementById('createTokenForm').reset();
+        }
+
+        function closeTokenDisplayModal() {
+            document.getElementById('tokenDisplayModal').style.display = 'none';
+        }
+
+        // Create token form submission
+        document.getElementById('createTokenForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const permissions = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(cb => cb.value);
+            const allowedOrigins = formData.get('allowedOrigins').split('\n').filter(origin => origin.trim()).map(origin => origin.trim());
+            
+            const tokenData = {
+                name: formData.get('name'),
+                permissions: permissions,
+                rateLimit: parseInt(formData.get('rateLimit')),
+                rateLimitWindow: formData.get('rateLimitWindow'),
+                allowedOrigins: allowedOrigins
+            };
+            
+            try {
+                const response = await fetch('/auth/tokens', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(tokenData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    closeCreateTokenModal();
+                    showNewToken(data.token);
+                    loadTokens();
+                    loadStats();
+                } else {
+                    alert('Failed to create token: ' + data.message);
+                }
+            } catch (error) {
+                alert('Failed to create token: ' + error.message);
+            }
+        });
+
+        function showNewToken(token) {
+            document.getElementById('newTokenKey').value = token.key;
+            document.getElementById('tokenUsageExample').value = `// Using in JavaScript
+fetch('/api/v1/collections', {
+    headers: {
+        'X-API-Key': '${token.key}'
+    }
+})
+
+// Using with curl
+curl -H "X-API-Key: ${token.key}" http://localhost:3000/api/v1/collections
+
+// Using as query parameter
+http://localhost:3000/api/v1/collections?api_key=${token.key}`;
+            
+            document.getElementById('tokenDisplayModal').style.display = 'block';
+        }
+
+        function copyToken() {
+            const tokenInput = document.getElementById('newTokenKey');
+            tokenInput.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = '#27ae60';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 2000);
+        }
+
+        // Token management functions
+        async function deleteToken(tokenId, tokenName) {
+            if (!confirm(`Are you sure you want to delete the token "${tokenName}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/auth/tokens/${tokenId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Token deleted successfully');
+                    loadTokens();
+                    loadStats();
+                } else {
+                    alert('Failed to delete token: ' + data.message);
+                }
+            } catch (error) {
+                alert('Failed to delete token: ' + error.message);
+            }
+        }
+
+        function viewTokenStats(tokenId) {
+            // Implement token stats view
+            alert('Token statistics feature coming soon!');
+        }
+
+        function editToken(tokenId) {
+            // Implement token editing
+            alert('Token editing feature coming soon!');
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 Open Hadith API. Built with ❤️ for the Muslim community worldwide.</p>
+        <p>Maintained by Nuzli L. Hernawan based on the excellent work of Muhammad Hashim.</p>
+        <p>May Allah accept our efforts and grant us beneficial knowledge.</p>
+    </div>
+</body>
+</html>

@@ -100,13 +100,13 @@ async function registerPlugins() {
 
   // Static files (for API documentation)
   await server.register(require('@fastify/static'), {
-    root: path.join(__dirname, 'public'),
+    root: path.join(__dirname, '../public'),
     prefix: '/docs/'
   });
 
   // Static files (for root access - test page, etc.)
   await server.register(require('@fastify/static'), {
-    root: path.join(__dirname, 'public'),
+    root: path.join(__dirname, '../public'),
     decorateReply: false
   });
 

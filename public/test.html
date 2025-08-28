@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadith API Test Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light theme colors */
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --accent-color: #0ea5e9;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Background colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --card-bg: #ffffff;
+            
+            /* Text colors */
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            
+            /* Border and shadow */
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* Islamic pattern colors */
+            --pattern-primary: rgba(37, 99, 235, 0.05);
+            --pattern-secondary: rgba(14, 165, 233, 0.03);
+        }
+        
+        [data-theme="dark"] {
+            /* Dark theme colors */
+            --primary-color: #3b82f6;
+            --secondary-color: #94a3b8;
+            --accent-color: #0ea5e9;
+            
+            /* Background colors */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --card-bg: #1e293b;
+            
+            /* Text colors */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            
+            /* Border and shadow */
+            --border-color: #334155;
+            --border-light: #475569;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            
+            /* Islamic pattern colors */
+            --pattern-primary: rgba(59, 130, 246, 0.1);
+            --pattern-secondary: rgba(14, 165, 233, 0.05);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Arabic', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        /* Islamic Pattern Background */
+        .islamic-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--pattern-primary) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, var(--pattern-secondary) 1px, transparent 1px),
+                linear-gradient(45deg, transparent 40%, var(--pattern-primary) 40%, var(--pattern-primary) 60%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, var(--pattern-secondary) 40%, var(--pattern-secondary) 60%, transparent 60%);
+            background-size: 40px 40px, 20px 20px, 60px 60px, 60px 60px;
+            background-position: 0 0, 10px 10px, 0 0, 30px 30px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px, 50px 50px;
+            pointer-events: none;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h1 {
+            margin: 0 0 15px 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header h1 i {
+            font-size: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 12px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 1.1rem;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 700px;
+        }
+        
+        .left-panel {
+            padding: 40px 30px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+        
+        .right-panel {
+            padding: 40px 30px;
+            background: var(--card-bg);
+            overflow-y: auto;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .section h3 {
+            color: var(--text-primary);
+            margin: 0 0 20px 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .section h3 i {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+        
+        .test-group {
+            margin-bottom: 20px;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 6px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .test-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .test-button:hover::before {
+            left: 100%;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .test-button:active {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .test-button.secondary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--text-muted) 100%);
+        }
+        
+        .test-button.success {
+            background: var(--success-color);
+            color: white;
+            border: 2px solid var(--success-color);
+        }
+        
+        .test-button.warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        .input-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .input-group label i {
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1), var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .input-group input:hover, .input-group select:hover {
+            border-color: var(--accent-color);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .input-group select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+            appearance: none;
+        }
+        
+        .results {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: 16px;
+            overflow: hidden;
+            max-height: 70vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .results-header {
+            background: var(--bg-secondary);
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .results-header h4 {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .results-header h4 i {
+            color: var(--primary-color);
+        }
+        
+        .results-content {
+            padding: 25px;
+        }
+        
+        .results pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .loading {
+            display: none;
+            color: var(--primary-color);
+            font-style: italic;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            margin: 15px 0;
+        }
+        
+        .loading::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid var(--error-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .error::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 16px;
+        }
+        
+        .success {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .status-indicator::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .status-indicator.online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-indicator.online::before {
+            background: var(--success-color);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
+        .status-indicator.offline {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+        
+        .status-indicator.offline::before {
+            background: var(--error-color);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+        
+        .clear-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .clear-btn::before {
+            content: '\f2ed';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 14px;
+        }
+        
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .arabic-text {
+            font-family: 'Noto Sans Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-size: 18px;
+            line-height: 2;
+            direction: rtl;
+            text-align: right;
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary-color);
+            margin: 15px 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+        
+        .hadith-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .hadith-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .hadith-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hadith-meta::before {
+            content: '\f02d';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+        }
+        
+        .pagination-info {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pagination-info::before {
+            content: '\f0ca';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="islamic-pattern"></div>
+    <div class="container">
+        <div class="header">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="header-content">
+                <h1><i class="fas fa-mosque"></i>Hadith API Test Suite</h1>
+                <p>Interactive testing interface for the Open Hadith Data API</p>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <!-- Status Section -->
+                <div class="section">
+                    <h3><i class="fas fa-heartbeat"></i>API Status</h3>
+                    <div id="status">
+                        <span class="status-indicator offline"></span>
+                        <span id="status-text">Checking...</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Tests -->
+                <div class="section">
+                    <h3><i class="fas fa-bolt"></i>Quick Tests</h3>
+                    <div class="test-group">
+                        <button class="test-button success" onclick="testHealth()">Health Check</button>
+                        <button class="test-button" onclick="testApiInfo()">API Info</button>
+                        <button class="test-button" onclick="testCollections()">Get Collections</button>
+                        <button class="test-button" onclick="testStats()">Statistics</button>
+                    </div>
+                </div>
+                
+                <!-- Collection Tests -->
+                <div class="section">
+                    <h3><i class="fas fa-book-open"></i>Collection Tests</h3>
+                    <div class="input-group">
+                        <label for="collectionSelect">Select Collection:</label>
+                        <select id="collectionSelect">
+                            <option value="">Loading collections...</option>
+                        </select>
+                    </div>
+                    <div class="test-group">
+                        <button class="test-button" onclick="testCollectionDetails()">Collection Details</button>
+                        <button class="test-button" onclick="testCollectionHadiths()">Get Hadiths (10)</button>
+                        <button class="test-button secondary" onclick="testCollectionHadithsWithDiacritics()">With Diacritics</button>
+                    </div>
+                </div>
+                
+                <!-- Search Tests -->
+                <div class="section">
+                    <h3><i class="fas fa-search"></i>Search Tests</h3>
+                    <div class="input-group">
+                        <label for="searchQuery">Search Query:</label>
+                        <input type="text" id="searchQuery" placeholder="Enter Arabic or English text" value="الصلاة">
+                    </div>
+                    <div class="input-group">
+                        <label for="searchCollection">Collection (optional):</label>
+                        <select id="searchCollection">
+                            <option value="">All collections</option>
+                        </select>
+                    </div>
+                    <div class="test-group">
+                        <button class="test-button warning" onclick="testSearch()">Search</button>
+                        <button class="test-button secondary" onclick="testSearchExact()">Exact Search</button>
+                        <button class="test-button" onclick="testSearchSuggestions()">Suggestions</button>
+                    </div>
+                </div>
+                
+                <!-- Specific Hadith Test -->
+                <div class="section">
+                    <h3><i class="fas fa-scroll"></i>Specific Hadith</h3>
+                    <div class="input-group">
+                        <label for="hadithCollection">Collection:</label>
+                        <select id="hadithCollection">
+                            <option value="sahih_al_bukhari">Sahih Al-Bukhari</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="hadithId">Hadith ID:</label>
+                        <input type="number" id="hadithId" placeholder="Enter hadith ID" value="1">
+                    </div>
+                    <div class="test-group">
+                        <button class="test-button warning" onclick="testSpecificHadith()">Get Hadith</button>
+                        <button class="test-button secondary" onclick="testSpecificHadithWithDiacritics()">With Diacritics</button>
+                    </div>
+                </div>
+                
+                <!-- Advanced Tests -->
+                <div class="section">
+                    <h3><i class="fas fa-cogs"></i>Advanced Tests</h3>
+                    <div class="test-group">
+                        <button class="test-button secondary" onclick="testDetailedHealth()">Detailed Health</button>
+                        <button class="test-button secondary" onclick="testStatsDistribution()">Distribution Stats</button>
+                        <button class="test-button secondary" onclick="testLargeSearch()">Large Result Set</button>
+                        <button class="test-button secondary" onclick="testPagination()">Test Pagination</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="results">
+                    <div class="results-header">
+                        <span>📋 API Response</span>
+                        <button class="clear-btn" onclick="clearResults()">Clear</button>
+                    </div>
+                    <div class="results-content">
+                        <div class="loading" id="loading">Loading...</div>
+                        <pre id="results">Welcome to the Hadith API Test Suite!
+
+Click any button on the left to test the API endpoints.
+
+The API provides access to 9 major Islamic Hadith collections:
+• Sahih Al-Bukhari
+• Sahih Muslim  
+• Sunan Abu-Dawud
+• Sunan Al-Tirmidhi
+• Sunan Al-Nasai
+• Sunan Ibn-Maja
+• Maliks Muwataa
+• Sunan Al-Darimi
+• Musnad Ahmad Ibn-Hanbal
+
+🔍 Try searching for: الصلاة (prayer), الصوم (fasting), or الحج (pilgrimage)</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1';
+        
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                themeToggle.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-theme');
+                themeToggle.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.className = 'fas fa-sun';
+            } else {
+                themeToggle.className = 'fas fa-moon';
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            checkApiStatus();
+            loadCollections();
+        });
+        
+        // Utility functions
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function updateResults(data, url = '') {
+            hideLoading();
+            const timestamp = new Date().toLocaleTimeString();
+            const resultsElement = document.getElementById('results');
+            
+            let formattedResponse = '';
+            if (url) {
+                formattedResponse += `🔗 Request: ${url}\n`;
+                formattedResponse += `⏰ Time: ${timestamp}\n`;
+                formattedResponse += `${'='.repeat(50)}\n\n`;
+            }
+            
+            if (typeof data === 'object') {
+                formattedResponse += JSON.stringify(data, null, 2);
+            } else {
+                formattedResponse += data;
+            }
+            
+            resultsElement.textContent = formattedResponse;
+        }
+        
+        function updateError(error, url = '') {
+            hideLoading();
+            const timestamp = new Date().toLocaleTimeString();
+            const resultsElement = document.getElementById('results');
+            
+            let errorResponse = '';
+            if (url) {
+                errorResponse += `❌ Failed Request: ${url}\n`;
+                errorResponse += `⏰ Time: ${timestamp}\n`;
+                errorResponse += `${'='.repeat(50)}\n\n`;
+            }
+            
+            errorResponse += `Error: ${error.message || error}\n`;
+            if (error.status) {
+                errorResponse += `Status: ${error.status}\n`;
+            }
+            
+            resultsElement.textContent = errorResponse;
+        }
+        
+        async function makeRequest(url, options = {}) {
+            showLoading();
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw { ...data, status: response.status };
+                }
+                
+                updateResults(data, url);
+                return data;
+            } catch (error) {
+                updateError(error, url);
+                throw error;
+            }
+        }
+        
+        // Status check
+        async function checkApiStatus() {
+            try {
+                const response = await fetch('/health');
+                if (response.ok) {
+                    document.querySelector('.status-indicator').className = 'status-indicator online';
+                    document.getElementById('status-text').textContent = 'API Online';
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                document.querySelector('.status-indicator').className = 'status-indicator offline';
+                document.getElementById('status-text').textContent = 'API Offline';
+            }
+        }
+        
+        // Load collections for dropdowns
+        async function loadCollections() {
+            try {
+                const data = await fetch(`${API_BASE}/collections`);
+                const collections = await data.json();
+                
+                const selects = ['collectionSelect', 'searchCollection', 'hadithCollection'];
+                selects.forEach(selectId => {
+                    const select = document.getElementById(selectId);
+                    if (selectId === 'collectionSelect') {
+                        select.innerHTML = '<option value="">Select a collection</option>';
+                    } else if (selectId === 'searchCollection') {
+                        select.innerHTML = '<option value="">All collections</option>';
+                    } else {
+                        select.innerHTML = '';
+                    }
+                    
+                    collections.collections.forEach(collection => {
+                        const option = document.createElement('option');
+                        option.value = collection.collectionId;
+                        option.textContent = `${collection.collectionName} (${collection.totalHadiths.toLocaleString()} hadiths)`;
+                        select.appendChild(option);
+                    });
+                });
+            } catch (error) {
+                console.error('Failed to load collections:', error);
+            }
+        }
+        
+        // Test functions
+        async function testHealth() {
+            await makeRequest('/health');
+        }
+        
+        async function testDetailedHealth() {
+            await makeRequest('/health/detailed');
+        }
+        
+        async function testApiInfo() {
+            await makeRequest(`${API_BASE}`);
+        }
+        
+        async function testCollections() {
+            await makeRequest(`${API_BASE}/collections`);
+        }
+        
+        async function testStats() {
+            await makeRequest(`${API_BASE}/stats`);
+        }
+        
+        async function testStatsDistribution() {
+            await makeRequest(`${API_BASE}/stats/distribution`);
+        }
+        
+        async function testCollectionDetails() {
+            const collectionId = document.getElementById('collectionSelect').value;
+            if (!collectionId) {
+                alert('Please select a collection first');
+                return;
+            }
+            await makeRequest(`${API_BASE}/collections/${collectionId}`);
+        }
+        
+        async function testCollectionHadiths() {
+            const collectionId = document.getElementById('collectionSelect').value;
+            if (!collectionId) {
+                alert('Please select a collection first');
+                return;
+            }
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths?limit=10`);
+        }
+        
+        async function testCollectionHadithsWithDiacritics() {
+            const collectionId = document.getElementById('collectionSelect').value;
+            if (!collectionId) {
+                alert('Please select a collection first');
+                return;
+            }
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths?limit=5&fileType=mushakkala_mufassala`);
+        }
+        
+        async function testSearch() {
+            const query = document.getElementById('searchQuery').value;
+            const collection = document.getElementById('searchCollection').value;
+            if (!query.trim()) {
+                alert('Please enter a search query');
+                return;
+            }
+            
+            let url = `${API_BASE}/search?q=${encodeURIComponent(query)}&limit=10`;
+            if (collection) {
+                url += `&collection=${collection}`;
+            }
+            
+            await makeRequest(url);
+        }
+        
+        async function testSearchExact() {
+            const query = document.getElementById('searchQuery').value;
+            if (!query.trim()) {
+                alert('Please enter a search query');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/search?q=${encodeURIComponent(query)}&exact=true&limit=5`);
+        }
+        
+        async function testSearchSuggestions() {
+            const query = document.getElementById('searchQuery').value;
+            if (!query.trim() || query.length < 2) {
+                alert('Please enter at least 2 characters for suggestions');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/search/suggestions?q=${encodeURIComponent(query)}&limit=10`);
+        }
+        
+        async function testSpecificHadith() {
+            const collectionId = document.getElementById('hadithCollection').value;
+            const hadithId = document.getElementById('hadithId').value;
+            
+            if (!collectionId || !hadithId) {
+                alert('Please enter both collection and hadith ID');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths/${hadithId}`);
+        }
+        
+        async function testSpecificHadithWithDiacritics() {
+            const collectionId = document.getElementById('hadithCollection').value;
+            const hadithId = document.getElementById('hadithId').value;
+            
+            if (!collectionId || !hadithId) {
+                alert('Please enter both collection and hadith ID');
+                return;
+            }
+            
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths/${hadithId}?fileType=mushakkala_mufassala`);
+        }
+        
+        async function testLargeSearch() {
+            await makeRequest(`${API_BASE}/search?q=الله&limit=50`);
+        }
+        
+        async function testPagination() {
+            const collectionId = document.getElementById('collectionSelect').value || 'sahih_al_bukhari';
+            await makeRequest(`${API_BASE}/collections/${collectionId}/hadiths?limit=20&offset=100`);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').textContent = 'Results cleared. Click any test button to start.';
+        }
+    </script>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 Open Hadith API. Built with ❤️ for the Muslim community worldwide.</p>
+        <p>Maintained by Nuzli L. Hernawan based on the excellent work of Muhammad Hashim.</p>
+        <p>May Allah accept our efforts and grant us beneficial knowledge.</p>
+    </div>
+</body>
+</html>
